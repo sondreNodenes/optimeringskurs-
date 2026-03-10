@@ -16,6 +16,7 @@ Oppgaver og modeller fra et kurs i matematisk optimering. Bruker **Pyomo** som m
 |-----|------|-------------|
 | `fabrikk.py` | Lineær programmering (MIP) | Maksimerer profitt for en fabrikk som produserer to produkter under kostnads-, CO₂- og malingsrestriksjoner |
 | `optimering.py` | Ikke-lineær optimering (NLP) | Finner optimal lokasjon for et nytt kontor basert på avstand og kostnad til eksisterende kontorer |
+| `hydro.py` | Lineær programmering (LP) | Minimerer materialkostnad for aluminiumslegeringer (Hydro-oppgave) med kjemiske krav og lagerbegrensninger |
 
 ---
 
@@ -50,21 +51,47 @@ $$\min \quad \sum_{k} c_k \cdot \sqrt{(x - x_k)^2 + (y - y_k)^2}$$
 
 ---
 
+### Hydro — Aluminiumslegering (hydro.py)
+
+Finner optimal blanding av råmaterialer for å produsere aluminiumslegeringer til minimalkostnad.
+
+**Del 1** — Produksjonsplan for én charge (maks 25 tonn).
+**Del 2** — Produksjonsplaner for alle ordre samtidig med delt lagerbeholdning.
+
+**Beslutningsvariabler:**
+- $x_i$ — antall tonn av råmateriale $i$ som brukes
+
+**Objektivfunksjon:**
+$$\min \quad \sum_{i} \text{kostnad}_i \cdot x_i$$
+
+**Restriksjoner:**
+| Restriksjon | Beskrivelse |
+|-------------|-------------|
+| Totalt vekt | = ordrevekt |
+| Lagerbeholdning | $x_i \leq \text{stock}_i$ |
+| Si, Fe, Mg | innenfor min/maks-prosent per ordre |
+| Ovnskapasitet | ≤ 25 tonn per charge |
+
+---
+
 ## Kom i gang
 
 ### Krav
 
 ```bash
-pip install pyomo
-brew install glpk          # GLPK-solver (MIP)
+pip3 install pyomo
+brew install glpk          # GLPK-solver (MIP/LP)
 brew install ipopt         # IPOPT-solver (NLP)
 ```
+
+> Ingen eksterne Python-pakker utover Pyomo — CSV-lesing bruker innebygd `csv`-modul.
 
 ### Kjør modellene
 
 ```bash
-python fabrikk.py
-python optimering.py
+python3 fabrikk.py
+python3 optimering.py
+python3 hydro.py
 ```
 
 ---
@@ -76,3 +103,18 @@ python optimering.py
 | [Pyomo](http://www.pyomo.org/) | Modelleringsspråk for optimering i Python |
 | [GLPK](https://www.gnu.org/software/glpk/) | Løser for lineære og heltallsproblemer |
 | [IPOPT](https://github.com/coin-or/Ipopt) | Løser for ikke-lineære problemer |
+
+---
+
+## Bidragsytere
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/sondreNodenes">
+        <img src="https://github.com/sondreNodenes.png" width="80px" alt="sondreNodenes"/><br/>
+        <sub><b>sondreNodenes</b></sub>
+      </a>
+    </td>
+  </tr>
+</table>
